@@ -17,10 +17,10 @@ class RecipeOrderSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     ingredients = IngredientSerializer(many=True)
     recipe_orders = RecipeOrderSerializer(many=True)
-    
+
     class Meta:
         model = Recipe
-        fields = ['id', 'recipe_title', 'link', 'ingredients', 'recipe_orders']
+        fields = ['id', 'recipe_title', 'link', 'time', 'servings', 'ingredients', 'recipe_orders']
     
     # list input 처리
     def create(self, validated_data):

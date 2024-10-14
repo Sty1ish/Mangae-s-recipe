@@ -10,12 +10,14 @@ class Recipe(models.Model):
     def __str__(self):
         return f'레시피: {self.recipe_title}, 요리 시간 : {self.time}, 요리 인분 : {self.servings}'
 
+
 class Ingredient(models.Model):
     recipe = models.ForeignKey(Recipe, related_name='ingredients', on_delete=models.CASCADE)
     ingredient = models.CharField(max_length=200, verbose_name='재료')
     
     def __str__(self):
         return self.ingredient
+
 
 class RecipeOrder(models.Model):
     recipe = models.ForeignKey(Recipe, related_name='recipe_orders', on_delete=models.CASCADE)
