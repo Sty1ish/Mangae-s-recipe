@@ -15,17 +15,24 @@ class Command(BaseCommand):
             next(reader)  # 헤더를 건너뜁니다.
 
             for row in reader:
-                if len(row) != 4:  # 데이터가 정확히 4개 열인지 확인
+                if len(row) != 6:  # 데이터가 정확히 6개 열인지 확인
                     self.stdout.write(self.style.ERROR('Invalid row: %s' % row))
                     continue
 
                 recipe_title = row[0]
                 link = row[1]
-                ingredients = eval(row[2])  # 문자열을 리스트로 변환
-                orders = eval(row[3])  # 문자열을 리스트로 변환
+                servings = row[2]  # servings 데이터
+                time = row[3]      # time 데이터
+                ingredients = eval(row[4])  # 문자열을 리스트로 변환
+                orders = eval(row[5])  # 문자열을 리스트로 변환
 
                 # 레시피 생성
-                recipe = Recipe.objects.create(recipe_title=recipe_title, link=link)
+                recipe = Recipe.objects.create(
+                    recipe_title=recipe_title,
+                    link=link,
+                    servings=servings,  # servings 필드 추가
+                    time=time           # time 필드 추가
+                )
 
                 # 재료 생성
                 for ingredient in ingredients:

@@ -26,7 +26,17 @@ for idx in tqdm(range(len(df))):
     link = df.loc[idx, 'link']
     data = requests.get(link)
     soup = BeautifulSoup(data.text, 'html.parser')
-    
+
+    top_info = soup.find('div', class_='view3_top_info')
+    if top_info and len(top_info.find_all('span')) == 3:  # span 요소가 3개일 경우
+        servings = top_info.find_all('span')[0].text.strip() 
+        time = top_info.find_all('span')[1].text.strip()    
+        df.loc[idx, 'servings'] = servings
+        df.loc[idx, 'time'] = time
+    else:
+        df.loc[idx, 'servings'] = "정보 없음"  # 정보가 없을 경우 처리
+        df.loc[idx, 'time'] = "정보 없음"      # 정보가 없을 경우 처리
+
     # 재료 추출
     ingredient_items = soup.find('dl', class_='view3_ingre').find_all('li')
     ingredients = str(list(map(lambda x: x.find('div', 'ingre_list_name').text.strip(), ingredient_items)))
@@ -45,23 +55,7 @@ for idx in tqdm(range(len(df))):
     else:
         df.loc[idx, 'orders'] = "단계 없음"  # 단계가 없을 경우 처리
 
+
 # CSV 파일로 저장
 df.to_csv('base_data.csv', index=False, encoding='utf-8-sig')
 print("데이터를 CSV 파일로 저장했습니다: base_data.csv")
-
-
-
-df.columns = ['recipe_title', 'link', 'ingredients', 'recipe_orders']
-
-df['ingredients'] = df['ingredients'].apply(lambda x : eval(x))
-df['recipe_orders'] = df['recipe_orders'].apply(lambda x : eval(x))
-
-df['ingredients'] = df['ingredients'].apply(lambda x : ["{'ingredient' : '"+ str(i) + "'}" for i in x])
-df['recipe_orders'] = df['recipe_orders'].apply(lambda x : ["{'order' : '"+ str(i) + "'}" for i in x])
-
-
-line = df.loc[0].to_json()
-
-# 여기서 for문 돌면 되지 않을까요?
-import json
-json.loads(line)
