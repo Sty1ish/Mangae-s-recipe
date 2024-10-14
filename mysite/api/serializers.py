@@ -20,7 +20,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ['id', 'recipe_title', 'link', 'time', 'servings', 'ingredients', 'recipe_orders']
+        fields = ['id', 'recipe_title', 'link', 'time', 'servings', 'image_url', 'ingredients', 'recipe_orders']
     
     # list input 처리
     def create(self, validated_data):
