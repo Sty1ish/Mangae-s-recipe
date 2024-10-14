@@ -8,11 +8,23 @@ class IngredientSerializer(serializers.ModelSerializer):
         fields = ['ingredient']
 
 class RecipeSerializer(serializers.ModelSerializer):
-    ingredient = IngredientSerializer(many=True)
+    ingredients = IngredientSerializer(many=True)
     
     class Meta:
         model = Recipe
-        fields = ['id', 'recipe_title', 'ingredient']
+        fields = ['id', 'recipe_title', 'ingredients']
+    
+    # list input 처리
+    def create(self, validated_data):
+        # 중첩된 ingredients 데이터를 분리
+        ingredients_data = validated_data.pop('ingredients')
+        recipe = Recipe.objects.create(**validated_data)  # Recipe 생성
+
+        # 각 Ingredient를 생성하여 Recipe와 연결
+        for ingredient_data in ingredients_data:
+            Ingredient.objects.create(recipe=recipe, **ingredient_data)
+        
+        return recipe
 
 
 class RecipeOrderSerializer(serializers.ModelSerializer):

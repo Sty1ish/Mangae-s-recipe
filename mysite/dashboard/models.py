@@ -8,7 +8,7 @@ class Recipe(models.Model):
         return f'레시피: {self.recipe}'
 
 class Ingredient(models.Model):
-    recipe = models.ForeignKey(Recipe, related_name='Ingredients', on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, related_name='ingredients', on_delete=models.CASCADE)
     ingredient = models.CharField(max_length=200, verbose_name='재료')
     
     def __str__(self):
