@@ -1,4 +1,8 @@
-import os
+# 해당 코드 shell에서 실행을 통한 초기 데이터 설정
+# from dashboard.scripts.init_data import Command
+# cmd = Command()
+# cmd.handle()
+
 from django.core.management.base import BaseCommand
 import csv
 from dashboard.models import Recipe, Ingredient, RecipeOrder  # 'dashboard'를 실제 앱 이름으로 변경하세요.
