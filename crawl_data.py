@@ -21,18 +21,13 @@ for idx, val in enumerate(line):
 
 
 
-
-
 # 개별 페이지 크롤링
-
 
 link = 'https://m.10000recipe.com/recipe/6845428'
 
 data = requests.get(link)
 
 soup = BeautifulSoup(data.text, 'html.parser')
-
-list(map(lambda x : x.find('a').text.strip(), soup.find('dl', class_ = 'view3_ingre').find_all('li')))
 
 
 for idx in tqdm(range(len(df))):
