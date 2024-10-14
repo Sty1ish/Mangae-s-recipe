@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 class Recipe(models.Model):
     recipe_title = models.CharField(max_length=200, verbose_name='레시피명')
+    link = models.CharField(max_length=200, verbose_name='레시피 링크')
                                 
     def __str__(self):
         return f'레시피: {self.recipe}'
@@ -21,9 +22,3 @@ class RecipeOrder(models.Model):
     def __str__(self):
         return f'{self.recipe} : {self.order}'
     
-class RecipeLink(models.Model):
-    recipe = models.ForeignKey(Recipe, related_name='recipe_link', on_delete=models.CASCADE)
-    link = models.CharField(max_length=200, verbose_name='레시피 링크')
-
-    def __str__(self):
-        return self.link
