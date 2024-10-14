@@ -18,7 +18,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container px-4 px-lg-5">
         <span class="navbar-title">만개의 레시피 재료 분석</span>
-        <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <!--      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
             <li class="nav-item">
@@ -52,7 +52,7 @@
               <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
             </button>
           </form>
-        </div> -->
+        </div>      -->
       </div>
     </nav>
     <!-- Product section -->
@@ -60,17 +60,19 @@
       <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-center">
           <div class="col-md-8">
-            <canvas id="myChart" width="400" height="400"></canvas>
+            <canvas id="popularIngredient" width="400" height="300"></canvas>
             <script>
-              const ctx = document.getElementById('myChart').getContext('2d')
-              const myChart = new Chart(ctx, {
+              const ingredientNames = JSON.parse('{{ most_popular_ingredient_name|safe }}')
+              const ingredientAmounts = JSON.parse('{{ most_popular_ingredient_amount|safe }}')
+              const ctx = document.getElementById('popularIngredient').getContext('2d')
+              const popularIngredient = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                  labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                  labels: ingredientNames,
                   datasets: [
                     {
-                      label: '# of Votes',
-                      data: [12, 19, 3, 5, 2, 3],
+                      label: '레시피 사용 수',
+                      data: ingredientAmounts,
                       backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'],
                       borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
                       borderWidth: 1
@@ -86,7 +88,7 @@
                 }
               })
             </script>
-            <canvas id="myChart2" width="400" height="400"></canvas>
+            <canvas id="myChart2" width="400" height="300"></canvas>
             <script>
               const ctx2 = document.getElementById('myChart2').getContext('2d')
               const myChart2 = new Chart(ctx2, {
