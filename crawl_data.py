@@ -48,3 +48,20 @@ for idx in tqdm(range(len(df))):
 # CSV 파일로 저장
 df.to_csv('base_data.csv', index=False, encoding='utf-8-sig')
 print("데이터를 CSV 파일로 저장했습니다: base_data.csv")
+
+
+
+df.columns = ['recipe_title', 'link', 'ingredients', 'recipe_orders']
+
+df['ingredients'] = df['ingredients'].apply(lambda x : eval(x))
+df['recipe_orders'] = df['recipe_orders'].apply(lambda x : eval(x))
+
+df['ingredients'] = df['ingredients'].apply(lambda x : ["{'ingredient' : '"+ str(i) + "'}" for i in x])
+df['recipe_orders'] = df['recipe_orders'].apply(lambda x : ["{'order' : '"+ str(i) + "'}" for i in x])
+
+
+line = df.loc[0].to_json()
+
+# 여기서 for문 돌면 되지 않을까요?
+import json
+json.loads(line)
