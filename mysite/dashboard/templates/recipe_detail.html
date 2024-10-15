@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -18,33 +19,29 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
   </head>
   <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container px-4 px-lg-5">
-        <span class="navbar-title">만개의 레시피 재료 분석</span>
-      </div>
-    </nav>
-    <style>
-      .navbar-title {
-          font-size: 32px;
-          font-weight: bold;
-          color: #090;
-          text-align: center;
-      }
-    </style>
     <!-- Product section -->
     <section class="py-5">
       <div class="container px-4 px-lg-5 my-5">
-          <div class="row gx-4 gx-lg-5 align-items-center">
-              <div class="col-md-8">
-                  <h2>{{ recipe.recipe_title }}</h2>
-                  <!-- 이미지 표시 -->
-                  <img src="{{ recipe.image_url }}" alt="{{ recipe.recipe_title }}" width="400" height="400" />
-              </div>
+        <div class="row gx-4 gx-lg-5 align-items-center">
+          <div class="col-md-4">
+            <h2></h2>
+            <!-- 이미지 표시 -->
+            <img src="{{ recipe.image_url }}" alt="{{ recipe.recipe_title }}" width="400" height="400" />
           </div>
+          <div class="col-md-8">
+            <h1 class="display-5 fw-bolder">{{ recipe.recipe_title }}</h1>
+            <div class="fs-5 mb-5">
+              <span>{{ recipe.servings }} 인분, 조리 시간 {{ recipe.time }}분</span>
+            </div>
+          </div>
+          <div class="fs-3 mb-5">
+          {% for i in recipe.ingredients.all %}
+            {{ i.ingredient }}
+          {% endfor %}
+        </div>
       </div>
-  </section>
-  
+    </section>
+
     <!-- Related items section -->
     <section class="py-5 bg-light">
       <div class="container px-4 px-lg-5 mt-5">
