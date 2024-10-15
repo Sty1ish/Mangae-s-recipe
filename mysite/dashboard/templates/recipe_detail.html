@@ -36,10 +36,11 @@
               <span>{{ recipe.servings }} 인분, 조리 시간 {{ recipe.time }}분</span>
             </div>
             <div class="fs-7 mb-7">
-              재료 :{% for i in recipe.ingredients.all %}
-                {{ i.ingredient }},
+              재료 : {% for i in recipe.ingredients.all %}
+                {{ i.ingredient }}{% if not forloop.last %}, {% endif %}
               {% endfor %}
             </div>
+            
           </div>
           <span></span>
           <hr style="width:80%; margin-left:10% !important; margin-right:10% !important; margin-top: 30px; margin-bottom: 30px;" />
