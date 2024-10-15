@@ -18,7 +18,8 @@ def index(request):
 
 def recipe_detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
-    return render(request, 'recipe_detail.html', {'recipe': recipe})
+    orders_with_index = enumerate([i.order for i in recipe.recipe_orders.all()])
+    return render(request, 'recipe_detail.html', {'recipe': recipe, 'orders_with_index' : orders_with_index})
 
 
 def recipe_list(request):
