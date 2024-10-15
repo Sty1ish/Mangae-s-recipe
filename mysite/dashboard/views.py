@@ -91,7 +91,7 @@ def chart_search_list(request, search_type, chart_label):
     cook_time['time_split_mapping'] = cook_time['time_split'].apply(lambda x : mapping_dict[x])
     
     # 재료 매핑
-    cook_time['isin_ingredient'] = [len(i.ingredients.all().filter(ingredient = chart_label)) != 0 for i in Recipe.objects.all()]
+    cook_time['isin_ingredient'] = [len(i.ingredients.all().filter(ingredient__icontains=chart_label)) != 0 for i in Recipe.objects.all()]
     
     if search_type == 'time':
         search_result_recipe = [obj for idx, obj in enumerate(Recipe.objects.all()) if idx in cook_time[cook_time['time_split_mapping'] == chart_label].index.tolist()]
