@@ -53,6 +53,79 @@
       {% include 'header.html' %}
     {% endblock %}
 
+  <div class="overlay" id="overlay" style="display: none;">
+      <h1>환영합니다!</h1>
+      <p>재형 효정 주호가 제작한 만개의 레시피 재료 분석 프로젝트입니다!</p>
+  </div>
+  
+  <style>
+      .overlay {
+          position: fixed;  
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(255, 255, 255, 0.9);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+          transition: opacity 0.8s ease; /* 사라지는 시간을 0.8초로 설정 */
+          opacity: 1;
+      }
+  
+      .main-content {
+          display: none; /* 메인 콘텐츠를 처음에 숨깁니다. */
+      }
+  
+      .main-content.show {
+          display: block; /* show 클래스가 추가되면 보이게 합니다. */
+      }
+  
+      .overlay h1 {
+          font-size: 48px;
+          color: #3cb44b;
+          margin-bottom: 20px;
+      }
+  
+      .overlay p {
+          font-size: 18px;
+          text-align: center;
+      }
+  </style>
+  
+  <script>
+    // 페이지가 로드될 때 오버레이를 확인합니다.
+    window.onload = function() {
+        const overlay = document.getElementById('overlay');
+        const mainContent = document.getElementById('main-content');
+
+        // 방문 횟수를 확인하고 업데이트
+        let visitCount = parseInt(localStorage.getItem('visitCount')) || 0;
+        visitCount += 1; // 방문 횟수 증가
+        localStorage.setItem('visitCount', visitCount); // 업데이트된 횟수 저장
+
+        // 최초 방문 시 또는 방문 횟수가 3의 배수일 때 오버레이 표시
+        if (visitCount === 1 || visitCount % 2 === 0) {
+            overlay.style.display = 'flex'; // 오버레이를 보여줍니다.
+            
+            // 오버레이가 사라진 후 메인 콘텐츠를 표시합니다.
+            overlay.addEventListener('click', function () {
+                overlay.style.opacity = '0';
+                overlay.style.pointerEvents = 'none'; // 클릭 방지를 위해
+                setTimeout(() => {
+                    mainContent.classList.add('show');
+                }, 800); // 오버레이가 사라지는 시간과 일치시킴
+            });
+        } else {
+            mainContent.classList.add('show'); // 이미 방문한 경우 바로 콘텐츠를 표시
+        }
+    };
+</script>
+
+
+
     <section class="py-5">
       <div class="container px-4 px-lg-5 my-5">
         <div class="row">

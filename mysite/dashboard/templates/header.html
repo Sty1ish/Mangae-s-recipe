@@ -1,17 +1,18 @@
 <!-- header.html -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light" style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
     <div class="container px-4 px-lg-5">
-        <a class="navbar-title" href="{% url 'dashboard:recipe_list' %}" style="text-decoration: none; color: #3cb44b;">
+        <a class="navbar-title" href="{% url 'dashboard:recipe_list' %}" style="text-decoration: none;">
             만개의 레시피 재료 분석
         </a>
-        <a href="{% url 'dashboard:visual' %}" class="btn btn-success ms-auto" style="margin-left: auto;">시각화 페이지로 이동</a>
+        <a href="{% url 'dashboard:visual' %}" class="btn btn-success ms-auto">시각화 페이지로 이동</a>
     </div>
 </nav>
+
 <style>
     .navbar {
         background-color: #f8f9fa;
     }
-    
+
     .navbar-title {
         font-size: 36px;
         font-weight: 700;
@@ -19,5 +20,18 @@
         text-align: center;
         letter-spacing: 2px;
         font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    .btn-success {
+        background-color: #3cb44b;
+        border: none;
+        border-radius: 25px;
+        padding: 10px 20px;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+
+    .btn-success:hover {
+        background-color: #32a52b; /* 버튼 hover 색상 */
     }
 </style>
