@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
@@ -17,152 +17,143 @@
     <!-- WordCloud -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
     <style>
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .wordcloud-container {
-            height: 300px;
-            width: 100%;
-            border: 2px solid #3cb44b;
-            border-radius: 15px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            position: relative;
-            background-color: #fff;
-            margin-bottom: 20px;
-        }
-
-        .input-label {
-            font-weight: bold;
-            color: #3cb44b;
-        }
-
-        #count {
-            border: 2px solid #3cb44b;
-            border-radius: 5px;
-            padding: 5px;
-        }
-
-        button {
-            background-color: #3cb44b;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #2a8a33;
-        }
-
-        .recommendation {
-            border: 2px solid #3cb44b;
-            border-radius: 15px;
-            padding-top: 10px;
-            background-color: #f9f9f9;
-            margin-bottom: 20px;
-        }
-
-        .recommendation img {
-            width: 100%;
-            height: 200px;
-            border-radius: 10px;
-        }
-
-        .chart-container {
-            border: 2px solid #3cb44b;
-            border-radius: 15px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            padding: 10px;
-            margin-bottom: 20px;
-            height: 505px; /* 기본 높이 설정 */
-        }
-
-        /* 수평 정렬을 위한 스타일 */
-        .row {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .col-md-8 {
-            flex: 7; /* 바 플롯을 7로 설정 */
-            margin-right: 10px; /* 오른쪽 여백 */
-        }
-
-        .col-md-4 {
-            flex: 3; /* 나머지 두 플롯을 3으로 설정 */
-        }
-
-        .recommendation-section {
-            flex: 1;
-            margin: 0 10px;
-        }
+      .input-group {
+        margin-bottom: 20px;
+      }
+      
+      .wordcloud-container {
+        height: 300px;
+        width: 100%;
+        border: 2px solid #3cb44b;
+        border-radius: 15px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        position: relative;
+        background-color: #fff;
+        margin-bottom: 20px;
+      }
+      
+      .input-label {
+        font-weight: bold;
+        color: #3cb44b;
+      }
+      
+      #count {
+        border: 2px solid #3cb44b;
+        border-radius: 5px;
+        padding: 5px;
+      }
+      
+      button {
+        background-color: #3cb44b;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+      
+      button:hover {
+        background-color: #2a8a33;
+      }
+      
+      .recommendation {
+        border: 2px solid #3cb44b;
+        border-radius: 15px;
+        padding-top: 10px;
+        background-color: #f9f9f9;
+        margin-bottom: 20px;
+      }
+      
+      .recommendation img {
+        width: 100%;
+        height: 200px;
+        border-radius: 10px;
+      }
+      
+      .chart-container {
+        border: 2px solid #3cb44b;
+        border-radius: 15px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        padding: 10px;
+        margin-bottom: 20px;
+        height: 505px; /* 기본 높이 설정 */
+      }
+      
+      /* 수평 정렬을 위한 스타일 */
+      .row {
+        display: flex;
+        justify-content: space-between;
+      }
+      
+      .col-md-8 {
+        flex: 7; /* 바 플롯을 7로 설정 */
+        margin-right: 10px; /* 오른쪽 여백 */
+      }
+      
+      .col-md-4 {
+        flex: 3; /* 나머지 두 플롯을 3으로 설정 */
+      }
+      
+      .recommendation-section {
+        flex: 1;
+        margin: 0 10px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Navigation -->
     {% block navbar %}
-    {% include 'header.html' %}
+      {% include 'header.html' %}
     {% endblock %}
 
     <div class="container">
-        <!-- 필터 섹션 -->
-        <div class="my-4">
-            <label class="input-label">상위 / 하위 선택:</label>
-            <div>
-                <label><input type="radio" name="top_bottom" value="top" checked> 상위</label>
-                <label><input type="radio" name="top_bottom" value="bottom"> 하위</label>
-            </div>
-
-            <label class="input-label" for="count">개수 선택 (최소 5개 이상):</label>
-            <div class="input-group">
-                <input type="number" id="count" value="5" min="5" />
-                <button id="update-btn">업데이트</button>
-            </div>
+      <!-- 필터 섹션 -->
+      <div class="my-4">
+        <label class="input-label">상위 / 하위 선택:</label>
+        <div>
+          <label><input type="radio" name="top_bottom" value="top" />상위</label>
+          <label><input type="radio" name="top_bottom" value="bottom" checked />하위</label>
         </div>
 
-        <!-- Bar Plot, Line Plot, and Recommendation -->
-        <div class="row">
-            <div class="col-md-8">
-                <div class="chart-container" id="barChartContainer">
-                    <canvas id="barChart" width="400" height="200"></canvas>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="recommendation" id="lineChartContainer">
-                    <canvas id="lineChart" width="400" height="200"></canvas>
-                </div>
-                <div class="recommendation">
-                    <h5>오늘의 추천 레시피</h5>
-                    {% if random_recipe %}
-                    <h6>{{ random_recipe.recipe_title }}</h6>
-                        <a href="{% url 'dashboard:recipe_detail' random_recipe.id %}">
-                            <img src="{{ random_recipe.image_url }}" alt="{{ random_recipe.title }}" />
-                        </a>
-                    {% else %}
-                        <p>추천 레시피가 없습니다.</p>
-                    {% endif %}
-                </div>
-            </div>
+        <label class="input-label" for="count">개수 선택 (최소 5개 이상):</label>
+        <div class="input-group">
+          <input type="number" id="count" value="200" min="5" />
+          <button id="update-btn">업데이트</button>
         </div>
+      </div>
 
-        <!-- Word Cloud -->
-        <div class="row">
-            <div class="col-md-12">
-                <div id="wordcloud" class="wordcloud-container"></div>
-            </div>
+      <!-- Bar Plot, Line Plot, and Recommendation -->
+      <div class="row">
+        <div class="col-md-8">
+          <div class="chart-container" id="barChartContainer">
+            <canvas id="barChart" width="400" height="200"></canvas>
+          </div>
         </div>
+        <div class="col-md-4">
+          <div class="recommendation" id="lineChartContainer">
+            <canvas id="lineChart" width="400" height="200"></canvas>
+          </div>
+          <div class="recommendation">
+            <h5>오늘의 추천 레시피</h5>
+            {% if random_recipe %}
+              <h6>{{ random_recipe.recipe_title }}</h6>
+              <a href="{% url 'dashboard:recipe_detail' random_recipe.id %}"><img src="{{ random_recipe.image_url }}" alt="{{ random_recipe.title }}" /></a>
+            {% else %}
+              <p>추천 레시피가 없습니다.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Word Cloud -->
+      <div class="row">
+        <div class="col-md-12">
+          <div id="wordcloud" class="wordcloud-container"></div>
+        </div>
+      </div>
     </div>
 
-        <!-- Word Cloud -->
-        <div class="row">
-            <div class="col-md-12">
-                <div id="wordcloud" class="wordcloud-container"></div>
-            </div>
-        </div>
-    </div>
     <script>
         const labels = {{ labels_json|safe }};
         const data = {{ data_json|safe }};
@@ -181,12 +172,12 @@
         
             // Bar Plot 업데이트
             const ctxBar = document.getElementById('barChart').getContext('2d');
-        
+
             // 이전 차트 제거
             if (ctxBar.chart) {
                 ctxBar.chart.destroy();
             }
-        
+
             // 새로운 차트 생성
             ctxBar.chart = new Chart(ctxBar, {
                 type: 'bar',
@@ -196,35 +187,42 @@
                         label: '재료 빈도',
                         data: ingredientFrequencies,
                         backgroundColor: ingredientFrequencies.map(frequency => {
-                            // 색상 조정: 빈도에 따라 색상 선택
-                            const hue = 120 - (frequency / Math.max(...ingredientFrequencies)) * 120; // 녹색에서 빨간색으로 변화
-                            return `hsl(${hue}, 70%, 60%)`; // HSL 색상
+                            const hue = 120 - (frequency / Math.max(...ingredientFrequencies)) * 120;
+                            return `hsl(${hue}, 70%, 60%)`;
                         }),
-                        borderColor: 'rgba(0, 0, 0, 0.2)', // 바의 테두리 색상
-                        borderWidth: 1, // 바의 테두리 두께
+                        borderColor: 'rgba(0, 0, 0, 0.2)',
+                        borderWidth: 1,
                     }]
                 },
                 options: {
                     responsive: true,
                     plugins: {
                         tooltip: {
-                            enabled: true, // 툴팁 활성화
-                            mode: 'index', // 인덱스 모드로 툴팁 표시
-                            intersect: false, // 교차하지 않을 때도 툴팁 표시
+                            enabled: true,
+                            mode: 'index',
+                            intersect: false,
                         }
                     },
                     interaction: {
-                        mode: 'index', // 인덱스 모드로 상호작용
-                        intersect: false, // 교차하지 않을 때도 상호작용
+                        mode: 'index',
+                        intersect: false,
                     },
                     scales: {
                         y: {
-                            beginAtZero: true // Y축 0에서 시작
+                            beginAtZero: true, // Y축 0에서 시작
+                            min: 0, // Y축의 최소값을 0으로 설정
+                            ticks: {
+                                stepSize: 1, // Y축의 단위를 1로 설정
+                                callback: function(value) {
+                                    // 정수일 경우만 반환
+                                    return Number.isInteger(value) ? value : '';
+                                }
+                            }
                         }
                     }
                 }
             });
-        
+
             // Word Cloud 업데이트
             const wordCloudContainer = document.getElementById('wordcloud');
             wordCloudContainer.innerHTML = '';  // 이전 내용 제거
@@ -258,7 +256,7 @@
             });
 
             // 초기 차트 업데이트
-            updateCharts('top', 5);
+            updateCharts('bottom', 200);
 
             // 조리 시간 라인 플롯
             const ctxLine = document.getElementById('lineChart').getContext('2d');
@@ -279,9 +277,9 @@
 
     <!-- Footer -->
     <footer class="py-5 bg-dark">
-        <div class="container">
-            <p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p>
-        </div>
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p>
+      </div>
     </footer>
-</body>
+  </body>
 </html>
