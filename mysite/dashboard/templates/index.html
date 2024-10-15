@@ -17,6 +17,41 @@
     <!-- WordCloud -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
   </head>
+  <style>
+    /* Custom scrollbar */
+    .col-md-3::-webkit-scrollbar {
+      width: 10px;
+    }
+    
+    .col-md-3::-webkit-scrollbar-thumb {
+      background-color: #3cb44b;
+      border-radius: 10px;
+      border: 2px solid #ffffff;
+    }
+    
+    .col-md-3::-webkit-scrollbar-track {
+      background-color: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    .recipe-img:hover {
+      transform: scale(1.02); /* 살짝 확대 */
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* 그림자 더 강하게 */
+      transition: transform 0.3s ease, box-shadow 0.3s ease; /* 부드러운 전환 */
+    }
+
+    .recipe-container:hover {
+      transform: scale(1.05); /* 전체 영역 확대 */
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* 그림자 효과 */
+      transition: transform 0.3s ease, box-shadow 0.3s ease; /* 부드러운 전환 */
+    }
+  
+    /* 링크 텍스트 색상 변경 */
+    .recipe-container:hover .rank-title a {
+      color: #3cb44b; /* 텍스트 색상을 초록색으로 변경 */
+      text-decoration: underline; /* 밑줄 추가 */
+    }
+  </style>
   <body>
     <!-- Navigation -->
 
@@ -50,14 +85,19 @@
             </div>
           </div>
           <!-- 오른쪽 영역: 레시피 랭킹 -->
-          <div class="col-md-3" style="height: 1205px; overflow-y: auto; position: relative; padding: 0px; border: 2px solid #3cb44b; border-radius: 15px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
-            <h2 class="text-center mb-5" style="position: sticky; top: 0; background-color: white; z-index: 10; font-family: 'Noto Sans KR', sans-serif; font-weight: bold; color: #3cb44b; padding: 10px; border-bottom: 2px solid #3cb44b;">레시피 랭킹</h2>
+          <div class="col-md-3" style="height: 1165px; overflow-y: auto; position: relative; padding: 0px; border: 2px solid #3cb44b; border-radius: 15px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
+            <h2 class="text-center mb-3" style="position: sticky; top: 0; background-color: white; z-index: 10; font-family: 'Noto Sans KR', sans-serif; font-weight: bold; color: #3cb44b; padding: 10px; border-bottom: 1px solid #3cb44b;">레시피 랭킹</h2>
+            
             {% for recipe in recipes %}
-              <div class="small mb-3" style="font-weight: bold; font-size: 1.5rem; color: #333333; font-family: 'Noto Sans KR', sans-serif; padding: 5px;">
-                <a href="{% url 'dashboard:recipe_detail' recipe.id %}" style="color: #333333; text-decoration: none;">{{ forloop.counter }}위: {{ recipe.recipe_title }}</a>
-              </div>
-              <div class="text-center mb-3" style="padding: 10px;">
-                <a href="{% url 'dashboard:recipe_detail' recipe.id %}"><img src="{{ recipe.image_url }}" alt="{{ recipe.recipe_title }}" style="width: 300px; height: 200px; max-width: 250px; border: 1px solid #dddddd; border-radius: 10px; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);" /></a>
+              <div class="mb-4 recipe-container" style="padding: 10px; font-family: 'Noto Sans KR', sans-serif;">
+                <div class="rank-title" style="font-weight: bold; font-size: 1.4rem; color: #333333; padding-bottom: 5px;">
+                  <a href="{% url 'dashboard:recipe_detail' recipe.id %}" style="color: #333333; text-decoration: none;">{{ forloop.counter }}위: {{ recipe.recipe_title }}</a>
+                </div>
+                <div class="text-center">
+                  <a href="{% url 'dashboard:recipe_detail' recipe.id %}">
+                    <img src="{{ recipe.image_url }}" alt="{{ recipe.recipe_title }}" class="img-fluid" style="width: 250px; height: 180px; object-fit: cover; border: 1px solid #dddddd; border-radius: 10px; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);" />
+                  </a>
+                </div>
               </div>
               <div style="border-bottom: 1px solid #cccccc; margin: 0 20px;" class="mb-3"></div>
             {% endfor %}
