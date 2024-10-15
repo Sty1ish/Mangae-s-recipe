@@ -180,7 +180,7 @@
         var label = slice[0]._model.label;
         var url = "{% url 'dashboard:recipe_time_search' 'label_placeholder' %}"
         url = url.replace('label_placeholder', encodeURIComponent(label));
-        window.open(url);
+        window.location.href = url;
       }
    </script>
   </body>
