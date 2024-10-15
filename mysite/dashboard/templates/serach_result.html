@@ -17,6 +17,14 @@
     <!-- WordCloud -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
   </head>
+  <style>
+    .card {
+      transition: transform 0.2s;
+    }
+    .card:hover {
+      transform: scale(1.05);
+    }
+  </style>
   <body>
     {% block navbar %}
       {% include 'header.html' %}
