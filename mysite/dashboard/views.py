@@ -1,12 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse 
-import json
+from mysite import settings
 from .models import *
 from collections import Counter
 import json
 import pandas as pd
 
-# Create your views here.
 def index(request):
     most_popular_ingredient = Counter([i.ingredient for i in Ingredient.objects.all()]).most_common(6)
     most_popular_ingredient_name = [name for name, val in most_popular_ingredient]
@@ -18,7 +17,7 @@ def index(request):
     return render(request, 'index.html', context)
 
 def recipe_detail(request, recipe_id):
-    recipe = Recipe.objects.get(id=recipe_id)
+    recipe = get_object_or_404(Recipe, id=recipe_id)
     return render(request, 'recipe_detail.html', {'recipe': recipe})
 
 
