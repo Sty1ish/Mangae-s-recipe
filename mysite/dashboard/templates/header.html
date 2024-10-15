@@ -1,16 +1,23 @@
 <!-- header.html -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light" style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
-    <div class="container px-4 px-lg-5">
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);">
+    <div class="container px-4 px-lg-5 d-flex justify-content-between align-items-center">
         <a class="navbar-title" href="{% url 'dashboard:recipe_list' %}" style="text-decoration: none;">
             만개의 레시피 재료 분석
         </a>
-        <a href="{% url 'dashboard:visual' %}" class="btn btn-success ms-auto">시각화 페이지로 이동</a>
+
+        <!-- 검색 입력 필드 -->
+        <form id="search-form" class="d-flex" onsubmit="return handleSearch(event);">
+            <div class="input-group">
+                <input type="text" id="search-input" class="form-control" placeholder="검색할 재료" aria-label="Search" required style="border-radius: 25px 0 0 25px; border: 1px solid #3cb44b;">
+                <button type="submit" class="btn btn-success" style="border-radius: 0 25px 25px 0;">검색</button>
+            </div>
+        </form>
     </div>
 </nav>
 
 <style>
     .navbar {
-        background-color: #f8f9fa;
+        background-color: #f0f4f8; /* 부드러운 배경색 */
     }
 
     .navbar-title {
@@ -22,10 +29,14 @@
         font-family: 'Noto Sans KR', sans-serif;
     }
 
+    .form-control {
+        font-size: 16px;
+        padding: 10px 15px; /* 패딩 조정 */
+    }
+
     .btn-success {
         background-color: #3cb44b;
         border: none;
-        border-radius: 25px;
         padding: 10px 20px;
         font-size: 16px;
         transition: background-color 0.3s;
@@ -34,4 +45,21 @@
     .btn-success:hover {
         background-color: #32a52b; /* 버튼 hover 색상 */
     }
+
+    .input-group {
+        width: auto; /* 입력 필드와 버튼을 한 줄로 표시 */
+    }
 </style>
+
+<script>
+    function handleSearch(event) {
+        event.preventDefault(); // 폼 제출 방지
+        const query = document.getElementById('search-input').value.trim();
+
+        if (query) {
+            // 검색 결과 페이지로 이동 (URL을 적절히 변경)
+            const url = "{% url 'dashboard:recipe_search' 'ingredient' 'label_placeholder' %}";
+            window.location.href = url.replace('label_placeholder', encodeURIComponent(query));
+        }
+    }
+</script>

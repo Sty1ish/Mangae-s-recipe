@@ -19,8 +19,9 @@
   </head>
   <style>
     /* Custom scrollbar */
+
     .col-md-3::-webkit-scrollbar {
-      width: 10px;
+      width: 8px;
     }
     
     .col-md-3::-webkit-scrollbar-thumb {
@@ -30,7 +31,9 @@
     }
     
     .col-md-3::-webkit-scrollbar-track {
-      background-color: #f1f1f1;
+      margin-top: 5px;
+      margin-bottom: 5px;
+      background-color: #ffffff;
       border-radius: 10px;
     }
     
@@ -57,6 +60,12 @@
       <h1>환영합니다!</h1>
       <p>재형 효정 주호가 제작한 만개의 레시피 재료 분석 프로젝트입니다!</p>
     </div>
+
+    <!-- 오른쪽으로 이동된 시각화 페이지로 가는 버튼 -->
+    <div class="d-flex justify-content-end mt-3" style="margin-right: 330px;">
+      <a href="{% url 'dashboard:visual' %}" class="btn btn-success" style="border-radius: 25px;">시각화 페이지로 이동</a>
+    </div>
+    
 
     <style>
       .overlay {
@@ -94,6 +103,7 @@
         text-align: center;
       }
     </style>
+
 
     <script>
       // 페이지가 로드될 때 오버레이를 확인합니다.
@@ -149,20 +159,21 @@
           </div>
           <!-- 오른쪽 영역: 레시피 랭킹 -->
           <div class="col-md-3" style="height: 1165px; overflow-y: auto; position: relative; padding: 0px; border: 2px solid #3cb44b; border-radius: 15px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
-            <h2 class="text-center mb-3" style="position: sticky; top: 0; background-color: white; z-index: 10; font-family: 'Noto Sans KR', sans-serif; font-weight: bold; color: #3cb44b; padding: 10px; border-bottom: 1px solid #3cb44b;">레시피 랭킹</h2>
-
+            <h2 class="text-center mb-3" style="position: sticky; top: 0; background-color: white; z-index: 10; font-family: 'Noto Sans KR', sans-serif; font-weight: bold; color: #3cb44b; padding: 10px; border-bottom: 1px solid #3cb44b; font-size: 1.5rem;">레시피 랭킹</h2> <!-- 글자 크기 줄임 -->
+          
             {% for recipe in recipes %}
               <div class="mb-4 recipe-container" style="padding: 10px; font-family: 'Noto Sans KR', sans-serif;">
-                <div class="rank-title" style="font-weight: bold; font-size: 1.4rem; color: #333333; padding-bottom: 5px;">
+                <div class="rank-title" style="font-weight: bold; font-size: 1.2rem; color: #333333; padding-bottom: 5px;"> <!-- 글자 크기 줄임 -->
                   <a href="{% url 'dashboard:recipe_detail' recipe.id %}" style="color: #333333; text-decoration: none;">{{ forloop.counter }}위: {{ recipe.recipe_title }}</a>
                 </div>
                 <div class="text-center">
                   <a href="{% url 'dashboard:recipe_detail' recipe.id %}"><img src="{{ recipe.image_url }}" alt="{{ recipe.recipe_title }}" class="img-fluid" style="width: 250px; height: 180px; object-fit: cover; border: 1px solid #dddddd; border-radius: 10px; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);" /></a>
                 </div>
               </div>
-              <div style="border-bottom: 1px solid #cccccc; margin: 0 20px;" class="mb-3"></div>
+              <div style="border-bottom: 1px solid #cccccc; margin: 0 20px; margin-bottom: 10px;" class="mb-3"></div> <!-- 아래 간격 조정 -->
             {% endfor %}
           </div>
+          
         </div>
       </div>
     </section>
@@ -213,6 +224,7 @@
         rotationSteps: 0,
         drawOutOfBound: false,
         shrinkToFit: true,
+        shape: 'circle',
         minSize: 10,
         // 클릭 이벤트 리스너 추가
         click: function(item) {
