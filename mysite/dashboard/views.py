@@ -82,3 +82,15 @@ def recipe_list(request):
         'cook_time_label' : cook_time['index'].tolist(),
         'cook_time_data' : cook_time['count'].tolist(),
     })
+    
+def time_chart_search_list(request, chart_label):
+    # 요리 시간 구하기 (dataFrame 인덱스를 기준으로 필터링)
+    cook_time = pd.DataFrame([i.time for i in Recipe.objects.all()], columns = ['time']) 
+    cook_time['time_split'] = pd.cut(cook_time['time'], [-1, 10,20,30,60,90,121])
+    mapping_dict = {i : v for i, v in zip(cook_time['time_split'].value_counts().sort_index().index, ['10분 미만', '10~20분', '20~30분', '30~60분', '60~90분', '90~120분'])}
+    cook_time['time_split_mapping'] = cook_time['time_split'].apply(lambda x : mapping_dict[x])
+    search_result_recipe = [obj for idx, obj in enumerate(Recipe.objects.all()) if idx in cook_time[cook_time['time_split_mapping'] == chart_label].index.tolist()]
+    
+    return render(request, 'time_serach_result.html', {
+        'search_result_recipe' : search_result_recipe
+    })
