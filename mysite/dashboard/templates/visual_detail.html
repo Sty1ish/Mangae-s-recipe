@@ -236,31 +236,30 @@
             // Word Cloud 업데이트
             const wordCloudContainer = document.getElementById('wordcloud');
             wordCloudContainer.innerHTML = '';  // 이전 내용 제거
-        
+
             // 가중치를 빈도의 역수로 계산 (빈도가 낮을수록 가중치 높음)
             const maxFrequency = Math.max(...ingredientFrequencies);
             const weightedData = ingredientData.map(ingredient => {
                 // 빈도가 낮을수록 높은 가중치 (상위 및 하위 모두 적용)
                 const weight = topOrBottom === 'top' 
-                    ? maxFrequency - ingredient.frequency + 1 // 상위: 빈도에 대한 반비례
-                    : ingredient.frequency + 1; // 하위: 빈도에 대한 정비례
+                    ? ingredient.frequency + 1 // 상위: 빈도가 높을수록 가중치 높음
+                    : maxFrequency - ingredient.frequency + 1; // 하위: 빈도가 낮을수록 가중치 높음
                 return [ingredient.name, weight];
             });
-        
+
             WordCloud(wordCloudContainer, {
                 list: weightedData,
                 weightFactor: 5, // 가중치의 조정 factor
                 color: () => '#' + Math.floor(Math.random() * 16777215).toString(16), // 랜덤 색상 생성
                 backgroundColor: '#fff',
-                // 클릭 이벤트 리스너 추가  
                 click: function(item) {
-                var url = "{% url 'dashboard:recipe_search' 'search_type' 'label_placeholder' %}";
-                url = url.replace('search_type', encodeURIComponent('ingredient'));
-                url = url.replace('label_placeholder', encodeURIComponent(item[0])); 
-                window.location.href = url; 
-          }
+                    var url = "{% url 'dashboard:recipe_search' 'search_type' 'label_placeholder' %}";
+                    url = url.replace('search_type', encodeURIComponent('ingredient'));
+                    url = url.replace('label_placeholder', encodeURIComponent(item[0])); 
+                    window.location.href = url; 
+                }
             });
-        }
+                    }
 
         $(document).ready(function() {
             $('#update-btn').click(function() {
@@ -279,6 +278,7 @@
             const ctxLine = document.getElementById('lineChart').getContext('2d');
             new Chart(ctxLine, {
                 type: 'line',
+                backgroundColor: '#fff',
                 data: {
                     labels: cookTimeLabels,
                     datasets: [{

@@ -89,6 +89,15 @@
         object-fit: cover; /* 이미지 비율 유지 */
         border-radius: 15px; /* 이미지 모서리 둥글게 */
       }
+
+      .btn-success {
+        background-color: #3cb44b;
+        border: none;
+        border-radius: 25px;
+        padding: 10px 20px;
+        font-size: 16px;
+        transition: background-color 0.3s;
+      }
     </style>
   </head>
   {% block navbar %}
@@ -120,6 +129,9 @@
             </tr>
           {% endfor %}
         </table>
+        <div class="text-center">
+          <a class="btn btn-success mt-3" href="{{ recipe.link }}" style="padding: 10px 20px; font-size: 18px;">만개의 레시피에서 확인하기!</a>
+        </div>
       </div>
     </section>
 
