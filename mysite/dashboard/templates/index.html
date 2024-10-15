@@ -177,78 +177,90 @@
     <script> 
     {% comment %} WordCloud {% endcomment %}
     document.addEventListener('DOMContentLoaded', function() {
-        const ingredients = {{ ingredients_json|safe }};
-                                
-        const frequencies = ingredients.map(ing => ing.frequency);
-        const maxFreq = Math.max(...frequencies);
-        const minFreq = Math.min(...frequencies);
-                                
-        const linearScale = (val, minVal, maxVal, newMin, newMax) => {
-            return newMin + (val - minVal) * (newMax - newMin) / (maxVal - minVal);
-        };
-
-        // 단어 목록을 생성하고 빈도를 스케일링합니다
-        const words = ingredients.map(ingredient => [
-                                        ingredient.name,
-                                        Math.max(5, Math.floor(linearScale(ingredient.frequency, minFreq, maxFreq, 10, 80))) // 크기 범위를 더 넓힘
-                                    ]);
-
-        console.log("Words for WordCloud:", words); // 디버깅을 위해 콘솔에 출력
-    
-        // 형형색색의 팔레트 생성
-        const colors = ['#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000'];
-                                
-        WordCloud(document.getElementById('wordcloud'), {
-            list: words,
-            gridSize: 10, // 글자 간격을 조금 더 조밀하게
-            weightFactor: 2.2, // 빈도에 따른 크기 차이를 더 극적으로 조정
-            fontFamily: 'Noto Sans KR, sans-serif',
-            color: function() {
-                return colors[Math.floor(Math.random() * colors.length)]; // 랜덤 색상
-                },
-            backgroundColor: 'white',
-            rotateRatio: 0.5, // 회전 비율
-            rotationSteps: 0, // 회전 각도
-            drawOutOfBound: false, // 경계를 벗어나지 않도록 설정
-            shrinkToFit: true, // 컨테이너에 맞추어 크기 조절
-            minSize: 10
-        });
-    });
-
-    {% comment %} 많이 사용한 재료 {% endcomment %}
-    var canvasB = document.getElementById("barChart");
-    const ctx = document.getElementById('barChart').getContext('2d');
-    const barChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: {{ labels_json|safe }},
-            datasets: [{
-                label: '레시피 수',
-                data: {{ data_json|safe }},
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-                hoverBackgroundColor: 'rgba(220, 0, 0, 0.7)',
-                hoverBorderColor: 'rgba(220, 0, 0, 0.7)',
-            }]
+      const ingredients = {{ ingredients_json|safe }};
+      
+      const frequencies = ingredients.map(ing => ing.frequency);
+      const maxFreq = Math.max(...frequencies);
+      const minFreq = Math.min(...frequencies);
+      
+      const linearScale = (val, minVal, maxVal, newMin, newMax) => {
+          return newMin + (val - minVal) * (newMax - newMin) / (maxVal - minVal);
+      };
+  
+      const words = ingredients.map(ingredient => [
+          ingredient.name,
+          Math.max(5, Math.floor(linearScale(ingredient.frequency, minFreq, maxFreq, 10, 80)))
+      ]);
+  
+      console.log("Words for WordCloud:", words);
+  
+      const colors = [
+        '#ffadad', '#ffd6a5', '#fdffb6', '#caffbf', '#9bfbc0',
+        '#a0c4ff', '#b9fbc0', '#ffc3a0', '#ff677d', '#d4a5a5',
+        '#392f5a', '#b8e4f8', '#ff9a00', '#b4f8e1', '#a5e8d4',
+        '#d0d3e2', '#ffe156', '#ff6f61', '#f7d2c0',
+      ];
+      WordCloud(document.getElementById('wordcloud'), {
+        list: words,
+        gridSize: 10,
+        weightFactor: 2.2,
+        fontFamily: 'Noto Sans KR, sans-serif',
+        color: function() {
+            return colors[Math.floor(Math.random() * colors.length)];
         },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-    canvasB.onclick = function(e) {
-        var slice = barChart.getElementAtEvent(e);
-        if (!slice.length) return; // return if not clicked on slice
-        var label = slice[0]._model.label;
-        var url = "{% url 'dashboard:recipe_search' 'search_type' 'label_placeholder' %}"
-        url = url.replace('search_type', encodeURIComponent('ingredient'));
-        url = url.replace('label_placeholder', encodeURIComponent(label));
-        window.location.href = url;
+        backgroundColor: 'white',
+        rotateRatio: 0.5,
+        rotationSteps: 0,
+        drawOutOfBound: false,
+        shrinkToFit: true,
+        minSize: 10,
+        // 클릭 이벤트 리스너 추가
+        click: function(item) {
+          var url = "{% url 'dashboard:recipe_search' 'search_type' 'label_placeholder' %}";
+          url = url.replace('search_type', encodeURIComponent('ingredient'));
+          url = url.replace('label_placeholder', encodeURIComponent(item[0])); 
+          window.location.href = url; 
       }
+    });
+    
+  
+      // 바 차트 설정
+      var canvasB = document.getElementById("barChart");
+      const ctx = canvasB.getContext('2d');
+      const barChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: {{ labels_json|safe }},
+              datasets: [{
+                  label: '레시피 수',
+                  data: {{ data_json|safe }},
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1,
+                  hoverBackgroundColor: 'rgba(220, 0, 0, 0.7)',
+                  hoverBorderColor: 'rgba(220, 0, 0, 0.7)',
+              }]
+          },
+          options: {
+              scales: {
+                  y: {
+                      beginAtZero: true
+                  }
+              }
+          }
+      });
+  
+      // 바 차트 클릭 이벤트
+      canvasB.onclick = function(e) {
+          var slice = barChart.getElementAtEvent(e);
+          if (!slice.length) return; // return if not clicked on slice
+          var label = slice[0]._model.label;
+          var url = "{% url 'dashboard:recipe_search' 'search_type' 'label_placeholder' %}";
+          url = url.replace('search_type', encodeURIComponent('ingredient'));
+          url = url.replace('label_placeholder', encodeURIComponent(label));
+          window.location.href = url;
+      }
+  });
 
     {% comment %} 조리 소요 시간 {% endcomment %}
     var canvasP = document.getElementById("piChart");

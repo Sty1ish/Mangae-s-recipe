@@ -251,7 +251,14 @@
                 list: weightedData,
                 weightFactor: 5, // 가중치의 조정 factor
                 color: () => '#' + Math.floor(Math.random() * 16777215).toString(16), // 랜덤 색상 생성
-                backgroundColor: '#fff'
+                backgroundColor: '#fff',
+                // 클릭 이벤트 리스너 추가  
+                click: function(item) {
+                var url = "{% url 'dashboard:recipe_search' 'search_type' 'label_placeholder' %}";
+                url = url.replace('search_type', encodeURIComponent('ingredient'));
+                url = url.replace('label_placeholder', encodeURIComponent(item[0])); 
+                window.location.href = url; 
+          }
             });
         }
 
