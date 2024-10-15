@@ -19,7 +19,18 @@ def index(request):
 def recipe_detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
     orders_with_index = enumerate([i.order for i in recipe.recipe_orders.all()])
-    return render(request, 'recipe_detail.html', {'recipe': recipe, 'orders_with_index' : orders_with_index})
+    
+    # 추천 상품 구하기
+    def get_random_recipe():
+        return Recipe.objects.order_by("?").first()
+    
+    random_recipe = [get_random_recipe() for _ in range(4)]
+    
+    return render(request, 'recipe_detail.html', {
+        'recipe': recipe,
+        'orders_with_index' : orders_with_index,
+        'random_recipe' : random_recipe,
+        })
 
 def visual_detail(request):
     recipes = Recipe.objects.all()
@@ -38,7 +49,11 @@ def visual_detail(request):
                  .reset_index()
                  )
     cook_time.loc[:, 'index'] = ['10분 미만', '10~20분', '20~30분', '30~60분', '60~90분', '90~120분']
+    
+    
 
+        
+    
     return render(request, 'visual_detail.html', {
         'recipes': recipes,
         'labels_json': json.dumps(labels, ensure_ascii=False),
