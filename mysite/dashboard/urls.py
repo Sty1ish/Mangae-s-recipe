@@ -6,5 +6,5 @@ app_name = 'dashboard'
 urlpatterns = [
     path('', views.recipe_list, name='recipe_list'),
     path('<int:recipe_id>/', views.recipe_detail, name='recipe_detail'),
-    path('visual/', views.visual_detail, name='recupe_detail')
+    path('visual/', views.visual_detail, name='visual')
 ]
