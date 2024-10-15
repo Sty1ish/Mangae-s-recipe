@@ -76,12 +76,12 @@
       tr:hover {
         background-color: #cfe2f3; /* 행에 마우스를 올렸을 때 배경색 */
       }
-
+      
       /* 이미지 둥글게 처리 */
       .img-fluid {
         border-radius: 15px; /* 이미지 모서리 둥글게 */
       }
-
+      
       /* 추천 레시피 카드 */
       .card-img-top {
         max-width: 100%;
@@ -110,8 +110,8 @@
         <hr />
         <table class="steps-table">
           <tr>
-            <th style="width: 5%">순서</th>
-            <th style="width: 95%">조리 방법</th>
+            <th style="width: 10%">순서</th>
+            <th style="width: 90%">조리 방법</th>
           </tr>
           {% for idx, order in orders_with_index %}
             <tr>
@@ -130,9 +130,7 @@
           {% for r_recipe in random_recipe %}
             <div class="col mb-5">
               <div class="card h-100">
-                <a href="{% url 'dashboard:recipe_detail' r_recipe.id %}">
-                  <img class="card-img-top" src="{{ r_recipe.image_url }}" alt="{{ r_recipe.recipe_title }}" />
-                </a>
+                <a href="{% url 'dashboard:recipe_detail' r_recipe.id %}"><img class="card-img-top" src="{{ r_recipe.image_url }}" alt="{{ r_recipe.recipe_title }}" /></a>
                 <div class="card-body text-center">
                   <h6 class="fw-bolder">{{ r_recipe.recipe_title }}</h6>
                 </div>
