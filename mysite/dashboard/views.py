@@ -92,5 +92,6 @@ def time_chart_search_list(request, chart_label):
     search_result_recipe = [obj for idx, obj in enumerate(Recipe.objects.all()) if idx in cook_time[cook_time['time_split_mapping'] == chart_label].index.tolist()]
     
     return render(request, 'time_serach_result.html', {
-        'search_result_recipe' : search_result_recipe
+        'search_result_recipe' : search_result_recipe,
+        'chart_label' : chart_label
     })
