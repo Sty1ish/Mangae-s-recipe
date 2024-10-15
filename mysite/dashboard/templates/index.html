@@ -107,46 +107,48 @@
       </script>
 
       <div id="wordcloud" style="height: 300px; width: 100%; margin-top: 20px; border: 1px solid #000;"></div>
-      <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const ingredients = {{ ingredients_json|safe }};
-            
-            // 빈도수의 최대값과 최소값을 찾습니다
-            const frequencies = ingredients.map(ing => ing.frequency);
-            const maxFreq = Math.max(...frequencies);
-            const minFreq = Math.min(...frequencies);
-            
-            // 선형 스케일링 함수를 정의합니다
-            const linearScale = (val, minVal, maxVal, newMin, newMax) => {
-                return newMin + (val - minVal) * (newMax - newMin) / (maxVal - minVal);
-            };
-            
-            // 단어 목록을 생성하고 빈도를 스케일링합니다
-            const words = ingredients.map(ingredient => [
-                ingredient.name,
-                Math.max(10, Math.floor(linearScale(ingredient.frequency, minFreq, maxFreq, 10, 100)))
-            ]);
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ingredients = {{ ingredients_json|safe }};
+        
+        const frequencies = ingredients.map(ing => ing.frequency);
+        const maxFreq = Math.max(...frequencies);
+        const minFreq = Math.min(...frequencies);
+        
+        const linearScale = (val, minVal, maxVal, newMin, newMax) => {
+            return newMin + (val - minVal) * (newMax - newMin) / (maxVal - minVal);
+        };
+
+        // 단어 목록을 생성하고 빈도를 스케일링합니다
+        const words = ingredients.map(ingredient => [
+            ingredient.name,
+            Math.max(10, Math.floor(linearScale(ingredient.frequency, minFreq, maxFreq, 15, 120))) // 크기 범위를 더 넓힘
+        ]);
   
-            console.log("Words for WordCloud:", words); // 디버깅을 위해 콘솔에 출력
+        console.log("Words for WordCloud:", words); // 디버깅을 위해 콘솔에 출력
   
-            // WordCloud2.js 라이브러리를 사용하여 워드 클라우드 생성
-            WordCloud(document.getElementById('wordcloud'), {
-                list: words,
-                gridSize: 16,
-                weightFactor: 1,
-                fontFamily: 'Noto Sans KR, sans-serif',
-                color: function(word, weight) {
-                    return weight > 80 ? '#f02222' : weight > 40 ? '#c09292' : '#b8b8b8';
-                },
-                backgroundColor: 'white',
-                rotateRatio: 0.5,
-                rotationSteps: 2,
-                drawOutOfBound: false,
-                shrinkToFit: true,
-                minSize: 10
-            });
+        // 형형색색의 팔레트 생성
+        const colors = ['#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000'];
+        
+        WordCloud(document.getElementById('wordcloud'), {
+            list: words,
+            gridSize: 12, // 글자 간격을 조금 더 조밀하게
+            weightFactor: 2.5, // 빈도에 따른 크기 차이를 더 극적으로 조정
+            fontFamily: 'Noto Sans KR, sans-serif',
+            color: function() {
+                return colors[Math.floor(Math.random() * colors.length)]; // 랜덤 색상
+            },
+            backgroundColor: 'white',
+            rotateRatio: 0.5, // 회전 비율
+            rotationSteps: 2, // 회전 각도
+            drawOutOfBound: false,
+            shrinkToFit: true,
+            minSize: 10
         });
-      </script>
+    });
+</script>
+
           
           </div>
           <div class="col-md-3" style="height: 1200px; overflow-y: auto; position: relative;">
