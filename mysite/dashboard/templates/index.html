@@ -60,8 +60,6 @@
                   }
               });
             </script>
-            
-            <div id="wordcloud" style="height: 300px; width: 100%; margin-top: 20px; border: 1px solid #000;"></div>
 
 	<canvas id="piChart" width="400" height="200"></canvas>
             <script>
@@ -108,7 +106,7 @@
         });
       </script>
 
-      
+      <div id="wordcloud" style="height: 300px; width: 100%; margin-top: 20px; border: 1px solid #000;"></div>
       <script>
         document.addEventListener('DOMContentLoaded', function() {
             const ingredients = {{ ingredients_json|safe }};
@@ -151,7 +149,7 @@
       </script>
           
           </div>
-          <div class="col-md-4" style="height: 800px; overflow-y: auto; position: relative;">
+          <div class="col-md-3" style="height: 1200px; overflow-y: auto; position: relative;">
             <h2 class="text-center mb-4" style="position: sticky; top: 0; background-color: white; z-index: 10;">레시피 랭킹</h2>
             {% for recipe in recipes %}
                 <div class="small mb-1" style="font-weight: bold; font-size: 1.25rem;">
