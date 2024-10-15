@@ -48,23 +48,20 @@
               </div>
             </div>
           </div>
-            <!-- 오른쪽 영역: 레시피 랭킹 -->
-            <div class="col-md-3" style="height: 1205px; overflow-y: auto; position: relative; padding: 0px; border: 2px solid #3cb44b; border-radius: 15px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
-              <h2 class="text-center mb-5" style="position: sticky; top: 0; background-color: white; z-index: 10; font-family: 'Noto Sans KR', sans-serif; font-weight: bold; color: #3cb44b; padding: 10px; border-bottom: 2px solid #3cb44b;">레시피 랭킹</h2>
-              {% for recipe in recipes %}
-                  <div class="small mb-3" style="font-weight: bold; font-size: 1.5rem; color: #333333; font-family: 'Noto Sans KR', sans-serif; padding: 5px;">
-                    <a href="http://127.0.0.1:8000/dashboard/{{ forloop.counter|add:13 }}" style="color: #333333; text-decoration: none;">
-                      {{ forloop.counter }}위: {{ recipe.recipe_title }}
-                    </a>
-                  </div>
-                  <div class="text-center mb-3" style="padding: 10px;">
-                    <a href="http://127.0.0.1:8000/dashboard/{{ forloop.counter|add:13 }}">
-                      <img src="{{ recipe.image_url }}" alt="{{ recipe.recipe_title }}" style="width: 300px; height: 200px; max-width: 250px; border: 1px solid #dddddd; border-radius: 10px; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);">
-                    </a>
-                  </div>
-                  <div style="border-bottom: 1px solid #cccccc; margin: 0 20px;" class="mb-3"></div>
-              {% endfor %}
-      </div>
+          <!-- 오른쪽 영역: 레시피 랭킹 -->
+          <div class="col-md-3" style="height: 1205px; overflow-y: auto; position: relative; padding: 0px; border: 2px solid #3cb44b; border-radius: 15px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
+            <h2 class="text-center mb-5" style="position: sticky; top: 0; background-color: white; z-index: 10; font-family: 'Noto Sans KR', sans-serif; font-weight: bold; color: #3cb44b; padding: 10px; border-bottom: 2px solid #3cb44b;">레시피 랭킹</h2>
+            {% for recipe in recipes %}
+              <div class="small mb-3" style="font-weight: bold; font-size: 1.5rem; color: #333333; font-family: 'Noto Sans KR', sans-serif; padding: 5px;">
+                <a href="{% url 'dashboard:recipe_detail' recipe.id %}" style="color: #333333; text-decoration: none;">{{ forloop.counter }}위: {{ recipe.recipe_title }}</a>
+              </div>
+              <div class="text-center mb-3" style="padding: 10px;">
+                <a href="{% url 'dashboard:recipe_detail' recipe.id %}"><img src="{{ recipe.image_url }}" alt="{{ recipe.recipe_title }}" style="width: 300px; height: 200px; max-width: 250px; border: 1px solid #dddddd; border-radius: 10px; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);" /></a>
+              </div>
+              <div style="border-bottom: 1px solid #cccccc; margin: 0 20px;" class="mb-3"></div>
+            {% endfor %}
+          </div>
+        </div>
       </div>
     </section>
 
