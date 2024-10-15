@@ -134,15 +134,18 @@
           <div class="recommendation" id="lineChartContainer">
             <canvas id="lineChart" width="400" height="200"></canvas>
           </div>
-          <div class="recommendation">
-            <h5>오늘의 추천 레시피</h5>
+          <div class="recommendation text-center">
+            <h5 class="fw-bold">오늘의 추천 레시피</h5>
             {% if random_recipe %}
               <h6>{{ random_recipe.recipe_title }}</h6>
-              <a href="{% url 'dashboard:recipe_detail' random_recipe.id %}"><img src="{{ random_recipe.image_url }}" alt="{{ random_recipe.title }}" /></a>
+              <a href="{% url 'dashboard:recipe_detail' random_recipe.id %}">
+                <img src="{{ random_recipe.image_url }}" alt="{{ random_recipe.title }}" class="img-fluid rounded" style="max-width: 400px;" />
+              </a>
             {% else %}
               <p>추천 레시피가 없습니다.</p>
             {% endif %}
           </div>
+          
         </div>
       </div>
 
