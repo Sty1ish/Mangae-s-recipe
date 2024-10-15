@@ -69,6 +69,7 @@
               <div class="col-md-12">
                 <!-- Bar Plot -->
                 <div style="border: 2px solid #3cb44b; border-radius: 15px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); padding: 10px; margin-bottom: 20px;">
+                  <h5 style="text-align: center; margin: 10px 0; font-weight: bold; top: 0; background-color: white; z-index: 10; font-family: 'Noto Sans KR', sans-serif; font-weight: bold; color: #3cb44b;">많이 이용한 재료!</h5>
                   <canvas id="barChart" width="400" height="200"></canvas>
                 </div>
 
@@ -161,7 +162,7 @@
         data: {
             labels: {{ labels_json|safe }},
             datasets: [{
-                label: '많이 사용된 재료들!',
+                label: '레시피 수',
                 data: {{ data_json|safe }},
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
