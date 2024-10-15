@@ -144,21 +144,57 @@
         const cookTimeData = {{ cook_time_data|safe }};
 
         function updateCharts(topOrBottom, count) {
-            const ingredientData = ingredients.slice(0, count);
+            // 상위 또는 하위 데이터 필터링
+            const ingredientData = topOrBottom === 'top' 
+                ? ingredients.sort((a, b) => b.frequency - a.frequency).slice(0, count)
+                : ingredients.sort((a, b) => a.frequency - b.frequency).slice(0, count);
+        
             const ingredientLabels = ingredientData.map(ingredient => ingredient.name);
             const ingredientFrequencies = ingredientData.map(ingredient => ingredient.frequency);
         
             // Bar Plot 업데이트
             const ctxBar = document.getElementById('barChart').getContext('2d');
-            new Chart(ctxBar, {
+        
+            // 이전 차트 제거
+            if (ctxBar.chart) {
+                ctxBar.chart.destroy();
+            }
+        
+            // 새로운 차트 생성
+            ctxBar.chart = new Chart(ctxBar, {
                 type: 'bar',
                 data: {
                     labels: ingredientLabels,
                     datasets: [{
                         label: '재료 빈도',
                         data: ingredientFrequencies,
-                        backgroundColor: '#3cb44b',
+                        backgroundColor: ingredientFrequencies.map(frequency => {
+                            // 색상 조정: 빈도에 따라 색상 선택
+                            const hue = 120 - (frequency / Math.max(...ingredientFrequencies)) * 120; // 녹색에서 빨간색으로 변화
+                            return `hsl(${hue}, 70%, 60%)`; // HSL 색상
+                        }),
+                        borderColor: 'rgba(0, 0, 0, 0.2)', // 바의 테두리 색상
+                        borderWidth: 1, // 바의 테두리 두께
                     }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        tooltip: {
+                            enabled: true, // 툴팁 활성화
+                            mode: 'index', // 인덱스 모드로 툴팁 표시
+                            intersect: false, // 교차하지 않을 때도 툴팁 표시
+                        }
+                    },
+                    interaction: {
+                        mode: 'index', // 인덱스 모드로 상호작용
+                        intersect: false, // 교차하지 않을 때도 상호작용
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true // Y축 0에서 시작
+                        }
+                    }
                 }
             });
         
@@ -166,12 +202,15 @@
             const wordCloudContainer = document.getElementById('wordcloud');
             wordCloudContainer.innerHTML = '';  // 이전 내용 제거
         
-            // 가중치를 빈도의 역수로 계산
+            // 가중치를 빈도의 역수로 계산 (빈도가 낮을수록 가중치 높음)
             const maxFrequency = Math.max(...ingredientFrequencies);
-            const weightedData = ingredientData.map(ingredient => [
-                ingredient.name,
-                maxFrequency - ingredient.frequency + 1 // 작은 값에 큰 가중치 부여
-            ]);
+            const weightedData = ingredientData.map(ingredient => {
+                // 빈도가 낮을수록 높은 가중치 (상위 및 하위 모두 적용)
+                const weight = topOrBottom === 'top' 
+                    ? maxFrequency - ingredient.frequency + 1 // 상위: 빈도에 대한 반비례
+                    : ingredient.frequency + 1; // 하위: 빈도에 대한 정비례
+                return [ingredient.name, weight];
+            });
         
             WordCloud(wordCloudContainer, {
                 list: weightedData,
@@ -201,7 +240,7 @@
                 data: {
                     labels: cookTimeLabels,
                     datasets: [{
-                        label: '조리 시간에 따른 재료 개수',
+                        label: '조리 소요시간 별 음식 수!',
                         data: cookTimeData,
                         borderColor: '#3cb44b',
                         fill: false,
