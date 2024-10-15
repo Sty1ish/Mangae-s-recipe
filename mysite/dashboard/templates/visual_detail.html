@@ -138,14 +138,11 @@
             <h5 class="fw-bold">오늘의 추천 레시피</h5>
             {% if random_recipe %}
               <h6>{{ random_recipe.recipe_title }}</h6>
-              <a href="{% url 'dashboard:recipe_detail' random_recipe.id %}">
-                <img src="{{ random_recipe.image_url }}" alt="{{ random_recipe.title }}" class="img-fluid rounded" style="max-width: 400px;" />
-              </a>
+              <a href="{% url 'dashboard:recipe_detail' random_recipe.id %}"><img src="{{ random_recipe.image_url }}" alt="{{ random_recipe.title }}" class="img-fluid rounded" style="max-width: 400px;" /></a>
             {% else %}
               <p>추천 레시피가 없습니다.</p>
             {% endif %}
           </div>
-          
         </div>
       </div>
 
@@ -174,6 +171,7 @@
             const ingredientFrequencies = ingredientData.map(ingredient => ingredient.frequency);
         
             // Bar Plot 업데이트
+            const canvasBar = document.getElementById('barChart')
             const ctxBar = document.getElementById('barChart').getContext('2d');
 
             // 이전 차트 제거
@@ -225,6 +223,15 @@
                     }
                 }
             });
+            canvasBar.onclick = function(e) {
+              var slice = ctxBar.chart.getElementAtEvent(e);
+              if (!slice.length) return; // return if not clicked on slice
+              var label = slice[0]._model.label;
+              var url = "{% url 'dashboard:recipe_search' 'search_type' 'label_placeholder' %}"
+              url = url.replace('search_type', encodeURIComponent('ingredient'));
+              url = url.replace('label_placeholder', encodeURIComponent(label));
+              window.location.href = url;
+            }
 
             // Word Cloud 업데이트
             const wordCloudContainer = document.getElementById('wordcloud');
