@@ -66,18 +66,38 @@
         }
 
         .recommendation img {
-            width: 50%;
+            width: 100%;
             height: 200px;
             border-radius: 10px;
         }
 
-        /* 추가 스타일링 */
         .chart-container {
             border: 2px solid #3cb44b;
             border-radius: 15px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             padding: 10px;
             margin-bottom: 20px;
+            height: 505px; /* 기본 높이 설정 */
+        }
+
+        /* 수평 정렬을 위한 스타일 */
+        .row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .col-md-8 {
+            flex: 7; /* 바 플롯을 7로 설정 */
+            margin-right: 10px; /* 오른쪽 여백 */
+        }
+
+        .col-md-4 {
+            flex: 3; /* 나머지 두 플롯을 3으로 설정 */
+        }
+
+        .recommendation-section {
+            flex: 1;
+            margin: 0 10px;
         }
     </style>
 </head>
@@ -95,6 +115,7 @@
                 <label><input type="radio" name="top_bottom" value="top" checked> 상위</label>
                 <label><input type="radio" name="top_bottom" value="bottom"> 하위</label>
             </div>
+
             <label class="input-label" for="count">개수 선택 (최소 5개 이상):</label>
             <div class="input-group">
                 <input type="number" id="count" value="5" min="5" />
@@ -102,40 +123,46 @@
             </div>
         </div>
 
-        <!-- Bar Plot and Word Cloud -->
+        <!-- Bar Plot, Line Plot, and Recommendation -->
         <div class="row">
             <div class="col-md-8">
-                <div class="chart-container">
+                <div class="chart-container" id="barChartContainer">
                     <canvas id="barChart" width="400" height="200"></canvas>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="chart-container">
+                <div class="recommendation" id="lineChartContainer">
                     <canvas id="lineChart" width="400" height="200"></canvas>
+                </div>
+                <div class="recommendation">
+                    <h5>오늘의 추천 레시피</h5>
+                    {% if random_recipe %}
+                    <h6>{{ random_recipe.recipe_title }}</h6>
+                        <a href="{% url 'dashboard:recipe_detail' random_recipe.id %}">
+                            <img src="{{ random_recipe.image_url }}" alt="{{ random_recipe.title }}" />
+                        </a>
+                    {% else %}
+                        <p>추천 레시피가 없습니다.</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
 
-        <!-- Word Cloud and Recommended Recipe Section -->
+        <!-- Word Cloud -->
         <div class="row">
-            <div class="col-md-6">
-                <!-- Word Cloud -->
+            <div class="col-md-12">
                 <div id="wordcloud" class="wordcloud-container"></div>
-            </div>
-            <div class="col-md-6 recommendation">
-                <h5>오늘의 추천 레시피</h5>
-                {% if random_recipe %}
-                <h6>{{ random_recipe.recipe_title }}</h6>
-                    <a href="{% url 'dashboard:recipe_detail' random_recipe.id %}">
-                        <img src="{{ random_recipe.image_url }}" alt="{{ random_recipe.title }}" />
-                    </a>
-                {% else %}
-                    <p>추천 레시피가 없습니다.</p>
-                {% endif %}
             </div>
         </div>
     </div>
 
+        <!-- Word Cloud -->
+        <div class="row">
+            <div class="col-md-12">
+                <div id="wordcloud" class="wordcloud-container"></div>
+            </div>
+        </div>
+    </div>
     <script>
         const labels = {{ labels_json|safe }};
         const data = {{ data_json|safe }};
