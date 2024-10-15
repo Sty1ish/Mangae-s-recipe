@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
@@ -16,21 +16,206 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- WordCloud -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
-  </head>
-  <body>
+    <style>
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .wordcloud-container {
+            height: 300px;
+            width: 100%;
+            border: 2px solid #3cb44b;
+            border-radius: 15px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            position: relative;
+            background-color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            font-weight: bold;
+            color: #3cb44b;
+        }
+
+        #count {
+            border: 2px solid #3cb44b;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        button {
+            background-color: #3cb44b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2a8a33;
+        }
+
+        .recommendation {
+            border: 2px solid #3cb44b;
+            border-radius: 15px;
+            padding-top: 10px;
+            background-color: #f9f9f9;
+            margin-bottom: 20px;
+        }
+
+        .recommendation img {
+            width: 50%;
+            height: 200px;
+            border-radius: 10px;
+        }
+
+        /* 추가 스타일링 */
+        .chart-container {
+            border: 2px solid #3cb44b;
+            border-radius: 15px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
     <!-- Navigation -->
-    
     {% block navbar %}
     {% include 'header.html' %}
     {% endblock %}
-  
-   
-   
-   <!-- Footer -->
+
+    <div class="container">
+        <!-- 필터 섹션 -->
+        <div class="my-4">
+            <label class="input-label">상위 / 하위 선택:</label>
+            <div>
+                <label><input type="radio" name="top_bottom" value="top" checked> 상위</label>
+                <label><input type="radio" name="top_bottom" value="bottom"> 하위</label>
+            </div>
+            <label class="input-label" for="count">개수 선택 (최소 5개 이상):</label>
+            <div class="input-group">
+                <input type="number" id="count" value="5" min="5" />
+                <button id="update-btn">업데이트</button>
+            </div>
+        </div>
+
+        <!-- Bar Plot and Word Cloud -->
+        <div class="row">
+            <div class="col-md-8">
+                <div class="chart-container">
+                    <canvas id="barChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="chart-container">
+                    <canvas id="lineChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Word Cloud and Recommended Recipe Section -->
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Word Cloud -->
+                <div id="wordcloud" class="wordcloud-container"></div>
+            </div>
+            <div class="col-md-6 recommendation">
+                <h5>오늘의 추천 레시피</h5>
+                {% if random_recipe %}
+                <h6>{{ random_recipe.recipe_title }}</h6>
+                    <a href="{% url 'dashboard:recipe_detail' random_recipe.id %}">
+                        <img src="{{ random_recipe.image_url }}" alt="{{ random_recipe.title }}" />
+                    </a>
+                {% else %}
+                    <p>추천 레시피가 없습니다.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const labels = {{ labels_json|safe }};
+        const data = {{ data_json|safe }};
+        const ingredients = {{ ingredients_json|safe }};
+        const cookTimeLabels = {{ cook_time_label|safe }};
+        const cookTimeData = {{ cook_time_data|safe }};
+
+        function updateCharts(topOrBottom, count) {
+            const ingredientData = ingredients.slice(0, count);
+            const ingredientLabels = ingredientData.map(ingredient => ingredient.name);
+            const ingredientFrequencies = ingredientData.map(ingredient => ingredient.frequency);
+        
+            // Bar Plot 업데이트
+            const ctxBar = document.getElementById('barChart').getContext('2d');
+            new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: ingredientLabels,
+                    datasets: [{
+                        label: '재료 빈도',
+                        data: ingredientFrequencies,
+                        backgroundColor: '#3cb44b',
+                    }]
+                }
+            });
+        
+            // Word Cloud 업데이트
+            const wordCloudContainer = document.getElementById('wordcloud');
+            wordCloudContainer.innerHTML = '';  // 이전 내용 제거
+        
+            // 가중치를 빈도의 역수로 계산
+            const maxFrequency = Math.max(...ingredientFrequencies);
+            const weightedData = ingredientData.map(ingredient => [
+                ingredient.name,
+                maxFrequency - ingredient.frequency + 1 // 작은 값에 큰 가중치 부여
+            ]);
+        
+            WordCloud(wordCloudContainer, {
+                list: weightedData,
+                weightFactor: 5, // 가중치의 조정 factor
+                color: () => '#' + Math.floor(Math.random() * 16777215).toString(16), // 랜덤 색상 생성
+                backgroundColor: '#fff'
+            });
+        }
+
+        $(document).ready(function() {
+            $('#update-btn').click(function() {
+                const count = parseInt($('#count').val());
+                const topOrBottom = $('input[name="top_bottom"]:checked').val();
+                const filteredIngredients = topOrBottom === 'top' 
+                    ? ingredients.sort((a, b) => b.frequency - a.frequency).slice(0, count) 
+                    : ingredients.sort((a, b) => a.frequency - b.frequency).slice(0, count);
+                updateCharts(topOrBottom, count);
+            });
+
+            // 초기 차트 업데이트
+            updateCharts('top', 5);
+
+            // 조리 시간 라인 플롯
+            const ctxLine = document.getElementById('lineChart').getContext('2d');
+            new Chart(ctxLine, {
+                type: 'line',
+                data: {
+                    labels: cookTimeLabels,
+                    datasets: [{
+                        label: '조리 시간에 따른 재료 개수',
+                        data: cookTimeData,
+                        borderColor: '#3cb44b',
+                        fill: false,
+                    }]
+                }
+            });
+        });
+    </script>
+
+    <!-- Footer -->
     <footer class="py-5 bg-dark">
         <div class="container">
-          <p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p>
+            <p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p>
         </div>
-      </footer>
-    </body>
-  </html>
+    </footer>
+</body>
+</html>
