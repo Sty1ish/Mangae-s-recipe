@@ -34,7 +34,7 @@
               <div class="col-md-12">
                 <!-- Bar Plot -->
                 <div style="border: 2px solid #3cb44b; border-radius: 15px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); padding: 10px; margin-bottom: 20px;">
-                  <canvas id="myChart" width="400" height="200"></canvas>
+                  <canvas id="barChart" width="400" height="200"></canvas>
                 </div>
 
                 <!-- Doughnut Chart -->
@@ -114,8 +114,9 @@
     });
 
     {% comment %} 많이 사용한 재료 {% endcomment %}
-    const ctx = document.getElementById('myChart').getContext('2d');
-    const myChart = new Chart(ctx, {
+    var canvasB = document.getElementById("barChart");
+    const ctx = document.getElementById('barChart').getContext('2d');
+    const barChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: {{ labels_json|safe }},
@@ -135,6 +136,15 @@
             }
         }
     });
+    canvasB.onclick = function(e) {
+        var slice = barChart.getElementAtEvent(e);
+        if (!slice.length) return; // return if not clicked on slice
+        var label = slice[0]._model.label;
+        var url = "{% url 'dashboard:recipe_search' 'search_type' 'label_placeholder' %}"
+        url = url.replace('search_type', encodeURIComponent('ingredient'));
+        url = url.replace('label_placeholder', encodeURIComponent(label));
+        window.location.href = url;
+      }
 
     {% comment %} 조리 소요 시간 {% endcomment %}
     var canvasP = document.getElementById("piChart");
@@ -178,7 +188,8 @@
         var slice = piChart.getElementAtEvent(e);
         if (!slice.length) return; // return if not clicked on slice
         var label = slice[0]._model.label;
-        var url = "{% url 'dashboard:recipe_time_search' 'label_placeholder' %}"
+        var url = "{% url 'dashboard:recipe_search' 'search_type' 'label_placeholder' %}"
+        url = url.replace('search_type', encodeURIComponent('time'));
         url = url.replace('label_placeholder', encodeURIComponent(label));
         window.location.href = url;
       }
