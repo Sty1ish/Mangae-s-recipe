@@ -1,17 +1,21 @@
 <!-- header.html -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light" style="box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);">
     <div class="container px-4 px-lg-5 d-flex justify-content-between align-items-center">
+        <!-- 왼쪽 타이틀 -->
         <a class="navbar-title" href="{% url 'dashboard:recipe_list' %}" style="text-decoration: none;">
             만개의 레시피 재료 분석
         </a>
 
-        <!-- 검색 입력 필드 -->
-        <form id="search-form" class="d-flex" onsubmit="return handleSearch(event);">
-            <div class="input-group">
+        <!-- 중앙 검색 입력 필드 -->
+        <form id="search-form" class="d-flex" onsubmit="return handleSearch(event);" style="flex-grow: 1; justify-content: center;">
+            <div class="input-group" style="max-width: 400px;"> <!-- 검색창 최대 크기 조정 -->
                 <input type="text" id="search-input" class="form-control" placeholder="검색할 재료" aria-label="Search" required style="border-radius: 25px 0 0 25px; border: 1px solid #3cb44b;">
                 <button type="submit" class="btn btn-success" style="border-radius: 0 25px 25px 0;">검색</button>
             </div>
         </form>
+
+        <!-- 오른쪽으로 이동된 시각화 페이지로 가는 버튼 -->
+        <a href="{% url 'dashboard:visual' %}" class="btn btn-success" style="border-radius: 25px; white-space: nowrap;">시각화 페이지로 이동</a>
     </div>
 </nav>
 
